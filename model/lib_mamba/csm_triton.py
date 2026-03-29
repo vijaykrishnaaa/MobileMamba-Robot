@@ -6,9 +6,22 @@ WITH_TRITON = True
 try:
     import triton
     import triton.language as tl
-except:
+except Exception as e:
     WITH_TRITON = False
-    warnings.warn("Triton not installed, fall back to pytorch implements.")
+    warnings.warn(f"Triton not installed, fall back to pytorch implements. (Error: {e})")
+
+# Mock triton and tl if not installed to avoid NameError during definition
+if not WITH_TRITON:
+    class Mock:
+        def __init__(self, *args, **kwargs): pass
+        def __call__(self, *args, **kwargs):
+             if len(args) == 1 and callable(args[0]): return args[0]
+             return self
+        def __getattr__(self, name): return self
+    triton = Mock()
+    tl = Mock()
+    # Explicitly mock triton.jit to be a pass-through decorator
+    triton.jit = lambda x: x
 
 # to make sure cached_property can be loaded for triton
 if WITH_TRITON:

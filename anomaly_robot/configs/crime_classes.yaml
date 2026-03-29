@@ -1,0 +1,13 @@
+classes:
+  0: Normal
+  1: Assault
+  2: Robbery
+  3: Shooting
+  4: Fighting
+  5: Abuse
+
+anomaly_classes: [1, 2, 3, 4, 5]  # any non-zero is anomaly
+anomaly_threshold: 0.65            # softmax confidence cutoff (raised from 0.55)
+window_size: 16                    # frames per decision window
+frame_sample_rate: 10              # sample every Nth frame from live feed
+roi_threshold: 0.4                 # GradCAM activation cutoff for bbox
